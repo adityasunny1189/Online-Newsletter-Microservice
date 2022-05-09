@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+option go_package = "github.com/adityasunny1189/gRPC-GORM-Auth-Microservice/protos";
+
+package user;
+
+service User {
+    rpc CreateUser (UserInfo) returns (ID);
+    rpc GetUsers (Empty) returns (stream UserInfo);
+    rpc GetUser (ID) returns (UserInfo);
+    rpc UpdateUser (UserInfo) returns (Status);
+    rpc DeleteUser (ID) returns (Status);
+}
+
+message Empty {}
+
+message ID {
+    int32 val = 1;
+}
+
+message Status {
+    int32 val = 1;
+}
+
+message UserInfo {
+    int32 id = 1;
+    string name = 2;
+    string email = 3;
+    string password = 4;
+}
