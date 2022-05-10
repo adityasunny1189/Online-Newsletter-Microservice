@@ -9,13 +9,15 @@ import (
 	"github.com/adityasunny1189/gRPC-GORM-Auth-Microservice/models"
 	pb "github.com/adityasunny1189/gRPC-GORM-Auth-Microservice/protos"
 	"github.com/adityasunny1189/gRPC-GORM-Auth-Microservice/services/db"
+	"github.com/adityasunny1189/gRPC-GORM-Auth-Microservice/utils"
 	"google.golang.org/grpc"
 )
 
 const (
-	port            = ":8080"
-	UserNotFoundErr = "user not found"
-	UserPresentErr  = "user with this email already present, try another email"
+	port               = ":8080"
+	InvalidPasswordErr = "incorrect password, please check your password"
+	UserNotFoundErr    = "user not found"
+	UserPresentErr     = "user with this email already present, try another email"
 )
 
 type userServer struct {
@@ -41,10 +43,10 @@ func (s *userServer) GetUsers(in *pb.Empty, stream pb.User_GetUsersServer) error
 	userslist := db.GetUsers()
 	for _, userinfo := range userslist {
 		user := &pb.UserInfo{
-			Id:       userinfo.Id,
-			Name:     userinfo.Name,
-			Email:    userinfo.Email,
-			Password: userinfo.Password,
+			Id:    userinfo.Id,
+			Name:  userinfo.Name,
+			Email: userinfo.Email,
+			// Password: userinfo.Password,
 		}
 		if err := stream.Send(user); err != nil {
 			return err
@@ -68,7 +70,7 @@ func (s *userServer) GetUser(ctx context.Context, in *pb.EmailInfo) (*pb.UserInf
 	res.Id = userinfo.Id
 	res.Name = userinfo.Name
 	res.Email = userinfo.Email
-	res.Password = userinfo.Password
+	// res.Password = userinfo.Password
 	return res, nil
 }
 
@@ -79,7 +81,7 @@ func (s *userServer) CreateUser(ctx context.Context, in *pb.UserInfo) (*pb.Email
 	user := models.User{
 		Name:     in.Name,
 		Email:    in.Email,
-		Password: in.Password,
+		Password: utils.HashPassword(in.Password),
 	}
 
 	// Create a res object
@@ -95,5 +97,24 @@ func (s *userServer) CreateUser(ctx context.Context, in *pb.UserInfo) (*pb.Email
 	// Add user data to database
 	db.AddUser(user)
 	res.Email = in.Email
+	return res, nil
+}
+
+func (s *userServer) LoginUser(ctx context.Context, in *pb.LoginInfo) (*pb.Status, error) {
+	res := &pb.Status{
+		Value: false,
+	}
+
+	// check for valid email and correct password
+	user := db.GetUser(in.Email)
+	if user.Email == "" {
+		err := errors.New(UserNotFoundErr)
+		return res, err
+	} else if utils.CheckPasswordHash(in.Password, user.Password) {
+		res.Value = true
+	} else {
+		err := errors.New(InvalidPasswordErr)
+		return res, err
+	}
 	return res, nil
 }
