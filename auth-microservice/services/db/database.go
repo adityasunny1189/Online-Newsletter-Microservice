@@ -26,3 +26,19 @@ func InitializeDB() {
 	db.AutoMigrate(&models.User{})
 	log.Println("connected to database nuclei")
 }
+
+func GetUsers() []models.User {
+	var data []models.User
+	db.Find(&data)
+	return data
+}
+
+func GetUser(email string) models.User {
+	var user models.User
+	db.First(&user, "email = ?", email)
+	return user
+}
+
+func AddUser(user models.User) {
+	db.Create(&user)
+}

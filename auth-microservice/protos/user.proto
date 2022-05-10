@@ -5,25 +5,18 @@ option go_package = "github.com/adityasunny1189/gRPC-GORM-Auth-Microservice/prot
 package user;
 
 service User {
-    rpc CreateUser (UserInfo) returns (ID);
+    rpc CreateUser (UserInfo) returns (EmailInfo);
     rpc GetUsers (Empty) returns (stream UserInfo);
-    rpc GetUser (ID) returns (UserInfo);
-    rpc UpdateUser (UserInfo) returns (Status);
-    rpc DeleteUser (ID) returns (Status);
+    rpc GetUser (EmailInfo) returns (UserInfo);
 }
 
 message Empty {}
 
-message ID {
-    int32 val = 1;
-}
-
-message Status {
-    int32 val = 1;
+message EmailInfo {
+    string email = 1;
 }
 
 message UserInfo {
-    int32 id = 1;
     string name = 2;
     string email = 3;
     string password = 4;
