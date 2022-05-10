@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"log"
 	"net"
 
@@ -12,7 +13,9 @@ import (
 )
 
 const (
-	port = ":8080"
+	port            = ":8080"
+	UserNotFoundErr = "user not found"
+	UserPresentErr  = "user with this email already present, try another email"
 )
 
 type userServer struct {
@@ -38,6 +41,7 @@ func (s *userServer) GetUsers(in *pb.Empty, stream pb.User_GetUsersServer) error
 	userslist := db.GetUsers()
 	for _, userinfo := range userslist {
 		user := &pb.UserInfo{
+			Id:       userinfo.Id,
 			Name:     userinfo.Name,
 			Email:    userinfo.Email,
 			Password: userinfo.Password,
@@ -51,25 +55,45 @@ func (s *userServer) GetUsers(in *pb.Empty, stream pb.User_GetUsersServer) error
 
 func (s *userServer) GetUser(ctx context.Context, in *pb.EmailInfo) (*pb.UserInfo, error) {
 	log.Printf("Received: %v", in)
+	res := &pb.UserInfo{}
+
+	// Get user details from database
 	userinfo := db.GetUser(in.Email)
-	res := &pb.UserInfo{
-		Name:     userinfo.Name,
-		Email:    userinfo.Email,
-		Password: userinfo.Password,
+	if userinfo.Email == "" {
+		err := errors.New(UserNotFoundErr)
+		return res, err
 	}
+
+	// If user found set the UserInfo object
+	res.Id = userinfo.Id
+	res.Name = userinfo.Name
+	res.Email = userinfo.Email
+	res.Password = userinfo.Password
 	return res, nil
 }
 
 func (s *userServer) CreateUser(ctx context.Context, in *pb.UserInfo) (*pb.EmailInfo, error) {
 	log.Printf("Received: %v", in)
+
+	// Create the user model from the input data
 	user := models.User{
 		Name:     in.Name,
 		Email:    in.Email,
 		Password: in.Password,
 	}
-	db.AddUser(user)
-	res := &pb.EmailInfo{
-		Email: user.Email,
+
+	// Create a res object
+	res := &pb.EmailInfo{}
+
+	// Check for already present users
+	u := db.GetUser(in.Email)
+	if u.Name != "" {
+		err := errors.New(UserPresentErr)
+		return res, err
 	}
+
+	// Add user data to database
+	db.AddUser(user)
+	res.Email = in.Email
 	return res, nil
 }

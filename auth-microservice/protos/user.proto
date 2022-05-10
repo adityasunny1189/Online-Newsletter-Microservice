@@ -8,6 +8,17 @@ service User {
     rpc CreateUser (UserInfo) returns (EmailInfo);
     rpc GetUsers (Empty) returns (stream UserInfo);
     rpc GetUser (EmailInfo) returns (UserInfo);
+    rpc LoginUser (LoginInfo) returns (Status);
+    rpc LogoutUser (Empty) returns (Status);
+}
+
+message Status {
+    bool value = 1;
+}
+
+message LoginInfo {
+    string email = 1;
+    string password = 2;
 }
 
 message Empty {}
@@ -17,6 +28,7 @@ message EmailInfo {
 }
 
 message UserInfo {
+    int32 id = 1;
     string name = 2;
     string email = 3;
     string password = 4;

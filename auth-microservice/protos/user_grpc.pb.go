@@ -25,6 +25,8 @@ type UserClient interface {
 	CreateUser(ctx context.Context, in *UserInfo, opts ...grpc.CallOption) (*EmailInfo, error)
 	GetUsers(ctx context.Context, in *Empty, opts ...grpc.CallOption) (User_GetUsersClient, error)
 	GetUser(ctx context.Context, in *EmailInfo, opts ...grpc.CallOption) (*UserInfo, error)
+	LoginUser(ctx context.Context, in *LoginInfo, opts ...grpc.CallOption) (*Status, error)
+	LogoutUser(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Status, error)
 }
 
 type userClient struct {
@@ -85,6 +87,24 @@ func (c *userClient) GetUser(ctx context.Context, in *EmailInfo, opts ...grpc.Ca
 	return out, nil
 }
 
+func (c *userClient) LoginUser(ctx context.Context, in *LoginInfo, opts ...grpc.CallOption) (*Status, error) {
+	out := new(Status)
+	err := c.cc.Invoke(ctx, "/user.User/LoginUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userClient) LogoutUser(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Status, error) {
+	out := new(Status)
+	err := c.cc.Invoke(ctx, "/user.User/LogoutUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServer is the server API for User service.
 // All implementations must embed UnimplementedUserServer
 // for forward compatibility
@@ -92,6 +112,8 @@ type UserServer interface {
 	CreateUser(context.Context, *UserInfo) (*EmailInfo, error)
 	GetUsers(*Empty, User_GetUsersServer) error
 	GetUser(context.Context, *EmailInfo) (*UserInfo, error)
+	LoginUser(context.Context, *LoginInfo) (*Status, error)
+	LogoutUser(context.Context, *Empty) (*Status, error)
 	mustEmbedUnimplementedUserServer()
 }
 
@@ -107,6 +129,12 @@ func (UnimplementedUserServer) GetUsers(*Empty, User_GetUsersServer) error {
 }
 func (UnimplementedUserServer) GetUser(context.Context, *EmailInfo) (*UserInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUser not implemented")
+}
+func (UnimplementedUserServer) LoginUser(context.Context, *LoginInfo) (*Status, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LoginUser not implemented")
+}
+func (UnimplementedUserServer) LogoutUser(context.Context, *Empty) (*Status, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LogoutUser not implemented")
 }
 func (UnimplementedUserServer) mustEmbedUnimplementedUserServer() {}
 
@@ -178,6 +206,42 @@ func _User_GetUser_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
+func _User_LoginUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LoginInfo)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServer).LoginUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/user.User/LoginUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServer).LoginUser(ctx, req.(*LoginInfo))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _User_LogoutUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServer).LogoutUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/user.User/LogoutUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServer).LogoutUser(ctx, req.(*Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // User_ServiceDesc is the grpc.ServiceDesc for User service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -192,6 +256,14 @@ var User_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUser",
 			Handler:    _User_GetUser_Handler,
+		},
+		{
+			MethodName: "LoginUser",
+			Handler:    _User_LoginUser_Handler,
+		},
+		{
+			MethodName: "LogoutUser",
+			Handler:    _User_LogoutUser_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
