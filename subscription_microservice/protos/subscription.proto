@@ -1,0 +1,5 @@
+syntax = "proto3";
+
+option go_package = "github.com/adityasunny1189/gRPC-GORM-Auth-Microservice/subscription-microservice/protos";
+
+package subscription;
