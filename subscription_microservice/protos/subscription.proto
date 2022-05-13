@@ -3,3 +3,57 @@ syntax = "proto3";
 option go_package = "github.com/adityasunny1189/gRPC-GORM-Auth-Microservice/subscription-microservice/protos";
 
 package subscription;
+
+import "google/protobuf/timestamp.proto";
+
+service SubscriptionService {
+    rpc GetPlans(Empty) returns (stream PlanInfo);
+    rpc GetPlan(PlanRequest) returns (PlanInfo);
+    rpc SortPlans(SortRequest) returns (stream PlanInfo);
+    rpc SubscribePlan(SubscriptionRequest) returns (SubscriptionResponse);
+    rpc CancelPlan(SubscriptionRequest) returns (SubscriptionResponse);
+    rpc RenewPlan(SubscriptionRequest) returns (SubscriptionResponse);
+    rpc GetAllSubscriptions(Empty) returns (stream PlanInfo);
+    rpc GetUserSubscriptions(ID) returns (stream PlanInfo);
+    rpc GetUserActiveSubscriptions(ID) returns (stream PlanInfo);
+    rpc GetUserPreviousSubscriptions(ID) returns (stream PlanInfo);
+}
+
+message Empty {}
+
+message PlanInfo {
+    int32 id = 1;
+    string name = 2;
+    float price = 3;
+    int32 validity = 4;
+}
+
+message PlanRequest {
+    string name = 1;
+}
+
+message SortRequest {
+    string value = 1;
+}
+
+message SubscriptionRequest {
+    int32 userid = 1;
+    int32 planid = 2;
+}
+
+message SubscriptionResponse {
+    int32 id = 1;
+    int32 userid = 2;
+    int32 planid = 3;
+    int32 planValidity = 4;
+    google.protobuf.Timestamp expiryDate = 5;
+    bool isActive = 6;
+}
+
+message ID {
+    string value = 1;
+}
+
+message Status {
+    bool value = 1;
+}

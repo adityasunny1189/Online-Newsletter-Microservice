@@ -15,7 +15,7 @@ const (
 )
 
 func main() {
-	conn, err := grpc.Dial(addr, grpc.WithBlock())
+	conn, err := grpc.Dial(addr, grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
 		log.Fatalf("connection error %v", err)
 	}

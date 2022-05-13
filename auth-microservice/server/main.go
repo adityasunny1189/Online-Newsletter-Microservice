@@ -43,10 +43,10 @@ func (s *userServer) GetUsers(in *pb.Empty, stream pb.User_GetUsersServer) error
 	userslist := db.GetUsers()
 	for _, userinfo := range userslist {
 		user := &pb.UserInfo{
-			Id:    userinfo.Id,
-			Name:  userinfo.Name,
-			Email: userinfo.Email,
-			// Password: userinfo.Password,
+			Id:       userinfo.Id,
+			Name:     userinfo.Name,
+			Email:    userinfo.Email,
+			Password: userinfo.Password,
 		}
 		if err := stream.Send(user); err != nil {
 			return err
@@ -70,7 +70,7 @@ func (s *userServer) GetUser(ctx context.Context, in *pb.EmailInfo) (*pb.UserInf
 	res.Id = userinfo.Id
 	res.Name = userinfo.Name
 	res.Email = userinfo.Email
-	// res.Password = userinfo.Password
+	res.Password = userinfo.Password
 	return res, nil
 }
 
