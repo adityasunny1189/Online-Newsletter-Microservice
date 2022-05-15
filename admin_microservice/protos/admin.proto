@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+option go_package = "github.com/adityasunny1189/gRPC-GORM-Auth-Microservice/admin_microservice/protos";
+
+package admin;
+
+import "google/protobuf/timestamp.proto";
+
+service AdminService {
+    rpc Login (LoginRequest) returns (Status);
+    rpc CreatePlan (PlanInfo) returns (ID);
+    rpc DeletePlan (ID) returns (Status);
+    rpc CreateNews (NewsInfo) returns (ID);
+    rpc GetPlans (Empty) returns (stream PlanInfo);
+    rpc GetUsers (Empty) returns (stream UserInfo);
+    rpc GetSubscriptions (Empty) returns (stream SubscriptionInfo);
+}
+
+message Empty {}
+
+message Status {
+    bool value = 1;
+}
+
+message ID {
+    int32 id = 1;
+}
+
+message LoginRequest {
+    string password = 1;
+}
+
+message PlanInfo {
+    int32 id = 1;
+    string name = 2;
+    float price = 3;
+    int32 validity = 4;
+}
+
+message NewsInfo {
+    int32 id = 1;
+    int32 pid = 2;
+    string author = 3;
+    string heading = 4;
+    string content = 5;
+}
+
+message UserInfo {
+    int32 id = 1;
+    string name = 2;
+    string email = 3;
+    string password = 4;
+}
+
+message SubscriptionInfo {
+    int32 id = 1;
+    int32 userid = 2;
+    int32 planid = 3;
+    int32 planValidity = 4;
+    google.protobuf.Timestamp expiryDate = 5;
+    bool isActive = 6;
+}
