@@ -14,6 +14,6 @@ type Subscription struct {
 	Uid          int32
 	Pid          int32
 	PlanValidity int32
-	ExpiryDate   *time.Time
+	ExpiryDate   time.Time
 	IsActive     bool
 }

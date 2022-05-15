@@ -13,10 +13,10 @@ service SubscriptionService {
     rpc SubscribePlan(SubscriptionRequest) returns (SubscriptionResponse);
     rpc CancelPlan(SubscriptionRequest) returns (SubscriptionResponse);
     rpc RenewPlan(SubscriptionRequest) returns (SubscriptionResponse);
-    rpc GetAllSubscriptions(Empty) returns (stream PlanInfo);
-    rpc GetUserSubscriptions(ID) returns (stream PlanInfo);
-    rpc GetUserActiveSubscriptions(ID) returns (stream PlanInfo);
-    rpc GetUserPreviousSubscriptions(ID) returns (stream PlanInfo);
+    rpc GetAllSubscriptions(Empty) returns (stream SubscriptionResponse);
+    rpc GetUserSubscriptions(ID) returns (stream SubscriptionResponse);
+    rpc GetUserActiveSubscriptions(ID) returns (stream SubscriptionResponse);
+    rpc GetUserPreviousSubscriptions(ID) returns (stream SubscriptionResponse);
 }
 
 message Empty {}
@@ -51,7 +51,7 @@ message SubscriptionResponse {
 }
 
 message ID {
-    string value = 1;
+    int32 value = 1;
 }
 
 message Status {

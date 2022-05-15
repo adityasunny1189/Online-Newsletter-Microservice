@@ -158,7 +158,7 @@ func (c *subscriptionServiceClient) GetAllSubscriptions(ctx context.Context, in 
 }
 
 type SubscriptionService_GetAllSubscriptionsClient interface {
-	Recv() (*PlanInfo, error)
+	Recv() (*SubscriptionResponse, error)
 	grpc.ClientStream
 }
 
@@ -166,8 +166,8 @@ type subscriptionServiceGetAllSubscriptionsClient struct {
 	grpc.ClientStream
 }
 
-func (x *subscriptionServiceGetAllSubscriptionsClient) Recv() (*PlanInfo, error) {
-	m := new(PlanInfo)
+func (x *subscriptionServiceGetAllSubscriptionsClient) Recv() (*SubscriptionResponse, error) {
+	m := new(SubscriptionResponse)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
@@ -190,7 +190,7 @@ func (c *subscriptionServiceClient) GetUserSubscriptions(ctx context.Context, in
 }
 
 type SubscriptionService_GetUserSubscriptionsClient interface {
-	Recv() (*PlanInfo, error)
+	Recv() (*SubscriptionResponse, error)
 	grpc.ClientStream
 }
 
@@ -198,8 +198,8 @@ type subscriptionServiceGetUserSubscriptionsClient struct {
 	grpc.ClientStream
 }
 
-func (x *subscriptionServiceGetUserSubscriptionsClient) Recv() (*PlanInfo, error) {
-	m := new(PlanInfo)
+func (x *subscriptionServiceGetUserSubscriptionsClient) Recv() (*SubscriptionResponse, error) {
+	m := new(SubscriptionResponse)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
@@ -222,7 +222,7 @@ func (c *subscriptionServiceClient) GetUserActiveSubscriptions(ctx context.Conte
 }
 
 type SubscriptionService_GetUserActiveSubscriptionsClient interface {
-	Recv() (*PlanInfo, error)
+	Recv() (*SubscriptionResponse, error)
 	grpc.ClientStream
 }
 
@@ -230,8 +230,8 @@ type subscriptionServiceGetUserActiveSubscriptionsClient struct {
 	grpc.ClientStream
 }
 
-func (x *subscriptionServiceGetUserActiveSubscriptionsClient) Recv() (*PlanInfo, error) {
-	m := new(PlanInfo)
+func (x *subscriptionServiceGetUserActiveSubscriptionsClient) Recv() (*SubscriptionResponse, error) {
+	m := new(SubscriptionResponse)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
@@ -254,7 +254,7 @@ func (c *subscriptionServiceClient) GetUserPreviousSubscriptions(ctx context.Con
 }
 
 type SubscriptionService_GetUserPreviousSubscriptionsClient interface {
-	Recv() (*PlanInfo, error)
+	Recv() (*SubscriptionResponse, error)
 	grpc.ClientStream
 }
 
@@ -262,8 +262,8 @@ type subscriptionServiceGetUserPreviousSubscriptionsClient struct {
 	grpc.ClientStream
 }
 
-func (x *subscriptionServiceGetUserPreviousSubscriptionsClient) Recv() (*PlanInfo, error) {
-	m := new(PlanInfo)
+func (x *subscriptionServiceGetUserPreviousSubscriptionsClient) Recv() (*SubscriptionResponse, error) {
+	m := new(SubscriptionResponse)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
@@ -457,7 +457,7 @@ func _SubscriptionService_GetAllSubscriptions_Handler(srv interface{}, stream gr
 }
 
 type SubscriptionService_GetAllSubscriptionsServer interface {
-	Send(*PlanInfo) error
+	Send(*SubscriptionResponse) error
 	grpc.ServerStream
 }
 
@@ -465,7 +465,7 @@ type subscriptionServiceGetAllSubscriptionsServer struct {
 	grpc.ServerStream
 }
 
-func (x *subscriptionServiceGetAllSubscriptionsServer) Send(m *PlanInfo) error {
+func (x *subscriptionServiceGetAllSubscriptionsServer) Send(m *SubscriptionResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
@@ -478,7 +478,7 @@ func _SubscriptionService_GetUserSubscriptions_Handler(srv interface{}, stream g
 }
 
 type SubscriptionService_GetUserSubscriptionsServer interface {
-	Send(*PlanInfo) error
+	Send(*SubscriptionResponse) error
 	grpc.ServerStream
 }
 
@@ -486,7 +486,7 @@ type subscriptionServiceGetUserSubscriptionsServer struct {
 	grpc.ServerStream
 }
 
-func (x *subscriptionServiceGetUserSubscriptionsServer) Send(m *PlanInfo) error {
+func (x *subscriptionServiceGetUserSubscriptionsServer) Send(m *SubscriptionResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
@@ -499,7 +499,7 @@ func _SubscriptionService_GetUserActiveSubscriptions_Handler(srv interface{}, st
 }
 
 type SubscriptionService_GetUserActiveSubscriptionsServer interface {
-	Send(*PlanInfo) error
+	Send(*SubscriptionResponse) error
 	grpc.ServerStream
 }
 
@@ -507,7 +507,7 @@ type subscriptionServiceGetUserActiveSubscriptionsServer struct {
 	grpc.ServerStream
 }
 
-func (x *subscriptionServiceGetUserActiveSubscriptionsServer) Send(m *PlanInfo) error {
+func (x *subscriptionServiceGetUserActiveSubscriptionsServer) Send(m *SubscriptionResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
@@ -520,7 +520,7 @@ func _SubscriptionService_GetUserPreviousSubscriptions_Handler(srv interface{}, 
 }
 
 type SubscriptionService_GetUserPreviousSubscriptionsServer interface {
-	Send(*PlanInfo) error
+	Send(*SubscriptionResponse) error
 	grpc.ServerStream
 }
 
@@ -528,7 +528,7 @@ type subscriptionServiceGetUserPreviousSubscriptionsServer struct {
 	grpc.ServerStream
 }
 
-func (x *subscriptionServiceGetUserPreviousSubscriptionsServer) Send(m *PlanInfo) error {
+func (x *subscriptionServiceGetUserPreviousSubscriptionsServer) Send(m *SubscriptionResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
