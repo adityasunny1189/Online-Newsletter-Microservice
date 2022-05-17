@@ -25,14 +25,21 @@ func main() {
 	// GetUsers(client)
 	// GetUser(client, "adityapathak1189@gmail.com")
 
-	// dummyUser := models.User{
-	// 	Name:     "Amit Shahwal",
-	// 	Email:    "amitshahwal24@gmail.com",
-	// 	Password: "password98",
-	// }
-	// Signup(client, dummyUser)
+	dummyUser := models.User{
+		Name:     "Aditya Placement",
+		Email:    "aditya.1si18is003@gmail.com",
+		Password: "password",
+	}
+	Signup(client, dummyUser)
 
-	Login(client, "adityapathak1189@gmail.com", "1234pass")
+	dummyUser2 := models.User{
+		Name:     "Nuclei",
+		Email:    "aditya.pathak@gonuclei.com",
+		Password: "mypass",
+	}
+	Signup(client, dummyUser2)
+
+	// Login(client, "adityapathak1189@gmail.com", "1234pass")
 }
 
 func GetUsers(client pb.UserClient) {

@@ -10,3 +10,9 @@ func GetAllSubscription(db *gorm.DB) []models.Subscription {
 	db.Find(&subscriptions)
 	return subscriptions
 }
+
+func GetSubscriptions(db *gorm.DB, pid int32) []models.Subscription {
+	var subs []models.Subscription
+	db.Find(&subs, "pid = ?", pid)
+	return subs
+}

@@ -10,3 +10,9 @@ func GetAllUser(db *gorm.DB) []models.User {
 	db.Find(&users)
 	return users
 }
+
+func GetUser(db *gorm.DB, id int32) string {
+	var user models.User
+	db.First(&user, "id = ?", id)
+	return user.Email
+}

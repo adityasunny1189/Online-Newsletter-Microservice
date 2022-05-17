@@ -12,6 +12,7 @@ import (
 	"github.com/adityasunny1189/gRPC-GORM-Auth-Microservice/admin_microservice/database/udb"
 	"github.com/adityasunny1189/gRPC-GORM-Auth-Microservice/admin_microservice/models"
 	pb "github.com/adityasunny1189/gRPC-GORM-Auth-Microservice/admin_microservice/protos"
+	"github.com/adityasunny1189/gRPC-GORM-Auth-Microservice/admin_microservice/services"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"gorm.io/gorm"
@@ -76,6 +77,15 @@ func (s *adminServer) CreateNews(ctx context.Context, in *pb.NewsInfo) (*pb.ID, 
 		Content: in.Content,
 	}
 	res.Id = ndb.CreateNews(s.db, news)
+
+	subscriptionlist := sdb.GetSubscriptions(s.db, in.Pid)
+	userEmailList := make([]string, 0, len(subscriptionlist))
+	for _, subscription := range subscriptionlist {
+		user := udb.GetUser(s.db, subscription.Uid)
+		userEmailList = append(userEmailList, user)
+	}
+	services.Mail(in.Author, in.Heading, in.Content, userEmailList)
+
 	return res, nil
 }
 
