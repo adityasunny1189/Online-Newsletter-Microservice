@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	Addr = "localhost:8080"
+	Addr = "localhost:8081"
 )
 
 func main() {
@@ -25,18 +25,18 @@ func main() {
 	// GetPlan(client, "weekly")
 	// GetSortedPlans(client, "validity")
 	// GetSortedPlans(client, "price")
-	SubscribePlan(client, 1, 1)
-	SubscribePlan(client, 2, 1)
-	SubscribePlan(client, 3, 1)
-	SubscribePlan(client, 4, 1)
-	SubscribePlan(client, 5, 1)
-	SubscribePlan(client, 6, 1)
-	// CancelPlan(client, 1, 3)
-	// RenewPlan(client, 1, 3)
+	// SubscribePlan(client, 1, 5)
+	// SubscribePlan(client, 2, 1)
+	// SubscribePlan(client, 3, 1)
+	// SubscribePlan(client, 4, 1)
+	// SubscribePlan(client, 5, 1)
+	// SubscribePlan(client, 6, 1)
+	// CancelPlan(client, 1, 5)
+	// RenewPlan(client, 1, 5)
 	// GetAllSubscriptions(client)
 	// GetUserSubscriptions(client, 1)
 	// GetUserActiveSubscriptions(client, 1)
-	// GetUserPreviousSubscriptions(client, 1)
+	GetUserPreviousSubscriptions(client, 1)
 }
 
 func GetAllPlan(client pb.SubscriptionServiceClient) {
@@ -75,6 +75,7 @@ func GetSortedPlans(client pb.SubscriptionServiceClient, value string) {
 	req := &pb.SortRequest{
 		Value: value,
 	}
+	log.Println("sorting on the basis of value %v", value)
 	stream, err := client.SortPlans(ctx, req)
 	if err != nil {
 		log.Fatalf("error fetching plans %v", err)

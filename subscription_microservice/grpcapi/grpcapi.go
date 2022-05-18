@@ -21,7 +21,7 @@ type subscriptionServer struct {
 }
 
 const (
-	port = ":8080"
+	port = ":8081"
 )
 
 func Serve(db *gorm.DB) {

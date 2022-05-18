@@ -9,7 +9,6 @@ import (
 const (
 	msg = `%v
 By: %v
-%v	
 `
 )
 
@@ -21,7 +20,7 @@ func Mail(author, heading, content string, destEmails []string) {
 	host := "smtp.gmail.com"
 	port := "587"
 
-	body := []byte(fmt.Sprintf(msg, heading, author, content))
+	body := []byte("Subject: " + heading + "\r\n\r\n" + "" + fmt.Sprintf(msg, content, author))
 	auth := smtp.PlainAuth("", from, password, host)
 	err := smtp.SendMail(host+":"+port, auth, from, toList, body)
 	if err != nil {
